@@ -2,7 +2,7 @@
 class clientDB{
   private $db;
   public function __construct(){
-    $this->db = new mysqli("localhost", "root", "Pinoy1992", "it202");
+    $this->db = new mysqli("localhost", "root", "*****", "it202");
     if ($this->db->connect_errno>0){
       echo __file__.__line__."failed to connect to database re:".$this->db->connect_error.PHP_EOL;
       exit(0);
