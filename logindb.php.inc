@@ -94,7 +94,36 @@ class localDB
 	}
 	return array("success"=>true);
     }
+    //-------------------------------------------------------------------------------------------------------------
+    //
+    //-------------------------------------------------------------------------------------------------------------
+    
+    public function nbaTeams(){
+      $query = "select * from nbateam";
+      $results = $this->db->query($query);
+      if ( !$results ){
+	return "error";
+      }
+      $count = 0;
+      while ( $team =  $results->fetch_assoc() ){
+	if ($count < 4){
+	  $strTeam .= "<td><a href='nbateams/".preg_replace('/\s+/', '', $team["teamName"]).".php' title='".$team["teamName"]."'>".$team["teamName"]."</a></td>";
+	  ++$count;
+	}else{
+	  $strTeam .= "<td><a href='nbateams/".preg_replace('/\s+/', '', $team["teamName"]).".php' title='".$team["teamName"]."'>".$team["teamName"]."</a></td>";
+	  $count = 0;
+	  $division = "<tr><td colspan='5' align='center'class='thsub'><strong>".ucfirst($team['division'])."</strong></td></tr>";
+	  $colTeam = $division."<tr>".$strTeam."</tr>";
+	  $reT .= $colTeam;
+	  $strTeam = "";
+	  
+	}
+	
+      }
+      return "<table>".$reT."</table>";
+    }
 
-}
+    
+   }
 // at this point db is connected
 ?>

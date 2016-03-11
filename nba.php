@@ -1,9 +1,11 @@
 <?php
   session_start();
    if ( isset( $_SESSION['username'] ) ){
-  $x =  "<p class='welcome'>Welcome, <a class='removealine' href='account.php' title=''>".$_SESSION['username']."</a></p>";
+  $x =  "<span class='welcome'>Welcome, ".$_SESSION['username']."</span>";
   }
-  
+  require_once("logindb.php.inc");
+  $login = new localDB("connect.ini");
+  $response = $login->nbaTeams();
   
 ?>
 
@@ -12,7 +14,7 @@
 <head>
 <link href="css/layout.css" rel="stylesheet" type="text/css" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Fantasy Sport Guide</title>
+<title>NBA</title>
 </head>
 
 <body>
@@ -23,23 +25,38 @@
 <input id="button" type="button" value="Search">
 </form>
 </div>
+
 <div id="NavBar">
 <ul>
   <li><a href="index.php">Home</a></li>
   <li><a href="nfl.php">NFL</a></li>
-  <li><a href="nba.php">NBA</a></li>
+  <li><a href="nba.php" class="active">NBA</a></li>
   <ul style="float:right;list-style-type:none;">
     <li><a href="#">About</a></li>
-    <li><a href="account.php" class="active">My Account</a></li>
+    <li><a href="account.php">My Account</a></li>
     <li><a href="#">Log Out</a></li>
   </ul>
 </ul>
 </div>
+
+
+<div id="SubBar">
+<ul>
+  <li><a href="nba.php" class="active">Teams</a></li>
+  <li><a href="nbastading.php">Standings</a></li>
+  <li><a href="players.php">Players</a></li>
+  <ul style="float:right;list-style-type:none;">
+    <li><?php echo $x;?></li>
+</ul>
+</div>
+
+
 <div id="Content">
-
-
+  <?php echo $response;?>
   
-  <?php echo $x;?>
+  </table>
+  
+
 
 </div>
 </div>

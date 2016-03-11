@@ -26,8 +26,8 @@
 <div id="NavBar">
 <ul>
   <li><a class="active" href="index.php">Home</a></li>
-  <li><a href="#NFL">NFL</a></li>
-  <li><a href="#NBA">NBA</a></li>
+  <li><a href="nfl.php">NFL</a></li>
+  <li><a href="nba.php">NBA</a></li>
   <ul style="float:right;list-style-type:none;">
     <li><a href="#">About</a></li>
     <li><a href="account.php">My Account</a></li>
