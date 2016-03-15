@@ -1,7 +1,7 @@
 <?php
   session_start();
    if ( isset( $_SESSION['username'] ) ){
-  $x =  "<span class='welcome'>Welcome, ".$_SESSION['username']."</span>";
+  $x =  "<p class='welcome'>Welcome, <a class='removealine' href='account.php' title=''>".$_SESSION['username']."</a></p>";
   }
   require_once("logindb.php.inc");
   $login = new localDB("connect.ini");
@@ -20,10 +20,7 @@
 <body>
 <div id="Holder">
 <div id="Header"><a href="index.php" title="Home"><img src="logo.jpeg" alt="Fantasy Sports Guide" height="125"></a>
-<form id="form-layout">
-<input id="search" type="text" placeholder="Search..." >
-<input id="button" type="button" value="Search">
-</form>
+<div style="float:right;"><?php echo $x?></div>
 </div>
 
 <div id="NavBar">
@@ -41,22 +38,18 @@
 
 
 <div id="SubBar">
+<nav>
 <ul>
   <li><a href="nba.php" class="active">Teams</a></li>
-  <li><a href="nbastading.php">Standings</a></li>
+  <li><a href="nbastanding.php">Standings</a></li>
   <li><a href="players.php">Players</a></li>
-  <ul style="float:right;list-style-type:none;">
-    <li><?php echo $x;?></li>
 </ul>
+</nav>
 </div>
 
 
 <div id="Content">
   <?php echo $response;?>
-  
-  </table>
-  
-
 
 </div>
 </div>

@@ -18,10 +18,7 @@
 <body>
 <div id="Holder">
 <div id="Header"><a href="index.php" title="Home"><img src="logo.jpeg" alt="Fantasy Sports Guide" height="125"></a>
-<form id="form-layout">
-<input id="search" type="text" placeholder="Search..." >
-<input id="button" type="button" value="Search">
-</form>
+<div style="float:right;"><?php echo $x?></div>
 </div>
 <div id="NavBar">
 <ul>
@@ -35,7 +32,7 @@
   </ul>
 </ul>
 </div>
-<div id="Content"> <?php echo $x; ?></div>
+<div id="Content"> </div>
 </div>
 </body>
 </html>
