@@ -5,7 +5,7 @@
   }
   require_once("logindb.php.inc");
   $login = new localDB("connect.ini");
-  $response = $login->nbaStandings();
+  $response = $login->allnbaplayers();
   
 ?>
 
@@ -48,9 +48,7 @@
 
 
 <div id="Content">
-  <?php echo $response;?>
-  
-
+  <div style="overflow:scroll; overflow-x:hidden;border:1px solid black; width:100%; height:600px;"><?php echo $response;?></div>
 </div>
 </div>
 </body>

@@ -107,10 +107,10 @@ class localDB
       $count = 0;
       while ( $team =  $results->fetch_assoc() ){
 	if ($count < 4){
-	  $strTeam .= "<td><a href='nbateams/".preg_replace('/\s+/', '', $team["teamName"]).".php' title='".$team["teamName"]."'>".$team["teamName"]."</a></td>";
+	  $strTeam .= "<td style='font-weight:bolder;'><a href='nbateams/".preg_replace('/\s+/', '', $team["teamName"]).".php' title='".$team["teamName"]."'>".$team["teamName"]."</a></td>";
 	  ++$count;
 	}else{
-	  $strTeam .= "<td><a href='nbateams/".preg_replace('/\s+/', '', $team["teamName"]).".php' title='".$team["teamName"]."'>".$team["teamName"]."</a></td>";
+	  $strTeam .= "<td style='font-weight:bolder;><a href='nbateams/".preg_replace('/\s+/', '', $team["teamName"]).".php' title='".$team["teamName"]."'>".$team["teamName"]."</a></td>";
 	  $count = 0;
 	  $division = "<tr><td colspan='5' align='center'class='thsub'><strong>".ucfirst($team['division'])."</strong></td></tr>";
 	  $colTeam = $division."<tr>".$strTeam."</tr>";
@@ -199,7 +199,10 @@ class localDB
 		  <td align='center'><b>STL</b></td><td align='center'><b>BLK</b></td><td align='center'><b>TO</b></td>
 		  <td align='center'><b>PTS</b></td></tr>";
 	while ( $team = $results->fetch_assoc() ){
-	  $myteam .= "<tr><td>".$team['lastName'].", ".$team['firstName']." ".$team['position']."</td><td align='center'>".
+	  $myteam .= "<tr><td><form action='account.php' method='post'>".$team['lastName'].", ".$team['firstName']." ".$team['position'].
+		"&nbsp; &nbsp; <button type='submit' name='removeplayer' alt='Add' value='".$team['playerId']."' style='border:none;background:url(nbateams/img/minus.png);
+		width:16px;height:16px;vertical-align:middle;'></button>
+		</form></td><td align='center'>".
 		$team['fieldGoal']."</td><td align='center'>".
 		$team['freeThrow']."</td><td align='center'>".
 		$team['threePoint']."</td><td align='center'>".
@@ -230,6 +233,58 @@ class localDB
 	return "Successfully Added";
 	}
     }
+    
+    public function removeplayer($player, $user){
+      $check = "select * from $user where playerId = $player; ";
+      $results = $this->db->query($check);
+      if (!$results){
+	return "error";
+      }
+      
+      if ($results->num_rows == 1){
+	$query = "delete from $user where playerId = $player; ";
+	$res = $this->db->query($query);
+	if (!$res){
+	  return "ERROR";
+	  }
+      }else {
+	return "Player cannot be found ".$player;
+      }
+      
+    }
+    
+    
+     //-------------------------------------------------------------------------------------------------------------
+    //
+    //-------------------------------------------------------------------------------------------------------------
+    
+    public function allnbaplayers(){
+      $query = "select * from nbarosters order by points desc;";
+      $results = $this->db->query($query);
+      if (!$results){
+	return "error";
+      }
+      $heading = "<tr><td ><b>Players</b></td><td align='center'><b>FG%</b></td><td align='center'><b>FT%</b></td><td align='center'><b>3PM</b></td>
+		  <td align='center'><b>REB</b></td><td align='center'><b>AST</b></td><td align='center'><b>STL</b></td>
+		  <td align='center'><b>BLK</b></td><td align='center'><b>TO</b></td><td align='center'><b>PTS</b></td></tr>";
+      while( $team =  $results->fetch_assoc() ){
+	$row .= "<tr><td><form action='../account.php' method='post'>".$team['lastName'].", ".$team['firstName']." ".$team['position'].
+		"&nbsp; &nbsp; <button type='submit' name='addteam' alt='Add' value='".$team['playerID']."' style='border:none;background:url(nbateams/img/add_small.png);
+		width:16px;height:16px;vertical-align:middle;'></button>
+		</form></td><td align='center'>".
+		$team['fieldGoal']."</td><td align='center'>".
+		$team['freeThrow']."</td><td align='center'>".
+		$team['threePoint']."</td><td align='center'>".
+		$team['rebound']."</td><td align='center'>".
+		$team['assist']."</td><td align='center'>".
+		$team['steal']."</td><td align='center'>".
+		$team['block']."</td><td align='center'>".
+		$team['turnovers']."</td><td align='center'>".
+		$team['points']."</td></tr>";
+      }
+      return "<table class='rosters'>".$heading.$row."</table>";
+    }
+    
   
     
    }

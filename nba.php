@@ -31,7 +31,7 @@
   <ul style="float:right;list-style-type:none;">
     <li><a href="#">About</a></li>
     <li><a href="account.php">My Account</a></li>
-    <li><a href="#">Log Out</a></li>
+    <li><a href="logout.php">Log Out</a></li>
   </ul>
 </ul>
 </div>
@@ -49,8 +49,43 @@
 
 
 <div id="Content">
-  <?php echo $response;?>
+<h3 style="margin:0px;"><strong>Headlines</strong></h3>
+<div style="width:10%;float:right;padding-right:10px;"><img style="float:right;" src="nbateams/img/nbalogo.png" alt="NBA Logo" width="70px" height="150px"/></div>
+  <div style="width:90%; border:1px solid black;height:150px;padding-
+      right:50px;font-size:10px;margin:0px;padding-left:5px;">
+      <?php 
+      $xml=("http://www.rotowire.com/rss/news.htm?sport=nba");
 
+      $xmlDoc = new DOMDocument();
+      $xmlDoc->load($xml);
+
+      //get elements from "<channel>"
+      $channel=$xmlDoc->getElementsByTagName('channel')->item(0);
+$channel_title = $channel->getElementsByTagName('title')
+->item(0)->childNodes->item(0)->nodeValue;
+$channel_link = $channel->getElementsByTagName('link')
+->item(0)->childNodes->item(0)->nodeValue;
+$channel_desc = $channel->getElementsByTagName('description')
+->item(0)->childNodes->item(0)->nodeValue;
+
+      
+
+      //get and output "<item>" elements
+      $x=$xmlDoc->getElementsByTagName('item');
+      for ($i=0; $i<=2; $i++) {
+	$item_title=$x->item($i)->getElementsByTagName('title')->item(0)->childNodes->item(0)->nodeValue;
+	$item_link=$x->item($i)->getElementsByTagName('link')->item(0)->childNodes->item(0)->nodeValue;
+	$item_desc=$x->item($i)->getElementsByTagName('description')->item(0)->childNodes->item(0)->nodeValue;
+	echo ("<p><a href='" . $item_link. "'>" . $item_title . "</a>");
+	echo ("<br>");
+	echo ($item_desc . "</p>");
+	}
+?>
+      
+      </div>
+  <div><h3 style="margin-top:3px;margin-bottom:5px;"> NBA Team</h3></div>
+  <div><?php echo $response;?></div>
+  
 </div>
 </div>
 </body>

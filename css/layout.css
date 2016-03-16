@@ -121,9 +121,13 @@ text-decoration:underline;
  border:1px solid black;
  border-collapse:collapse;
 }
-#Content a{
+#Content td a{
   text-decoration: none;
   color: black;
+}
+#Content td a:hover{
+  text-decoration: none;
+  color: red;
 }
 .in-p{
   margin: 0px;

@@ -5,14 +5,18 @@
    $login = new localDB("connect.ini");
    $result = $login->addplayer( $_POST['addteam'], $_SESSION['username'] );
   }
+  
+  if(isset($_POST['removeplayer']) && isset($_SESSION['username'])){
+    require_once('logindb.php.inc');
+    $login=new localDB("connect.ini");
+    $result = $login->removeplayer( $_POST['removeplayer'], $_SESSION['username']);
+  }
+  
    if ( isset( $_SESSION['username'] ) ){
   $x =  "<p class='welcome'>Welcome, <a class='removealine' href='account.php' title=''>".$_SESSION['username']."</a></p>";
-  
-  
   require_once('logindb.php.inc');
   $login = new localDB("connect.ini");
   $response = $login->myteam( $_SESSION['username'] );
-  
   }
  
   
