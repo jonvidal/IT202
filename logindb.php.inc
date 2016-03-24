@@ -86,13 +86,22 @@ class localDB
         $now = date("Y-m-d h:i:s",time());
         $name = $this->db->real_escape_string($username);
 	$password = $this->saltPassword($password);
-        $addQuery = "insert into fantasysport (userName, userPW, firstName, lastName, emailAd, activeSession, lastLogin) values ('$username', '$password', '$firstName', '$lastName', '$emailAd','$now','$now');";
+        $addQuery = "insert into fantasysport (userName, userPW, firstName, lastName, emailAd, activeSession, lastLogin, permission) values ('$username', '$password', '$firstName', '$lastName', '$emailAd','$now','$now','FALSE');";
         $results = $this->db->query($addQuery);
 	if (!$results)
 	{
 	    $this->logger->log("error: ".$this->db->error);
+	    return "Connect DB Error";
+	}
+	$userdb = "create table $username (playerId int(11) primary key);";
+	$create = $this->db->query($userdb);
+	if (!$create)
+	{
+	    $this->logger->log("error: ".$this->db->error);
+	    return "Connect DB Error";
 	}
 	return array("success"=>true);
+	
     }
     //-------------------------------------------------------------------------------------------------------------
     //
@@ -110,7 +119,7 @@ class localDB
 	  $strTeam .= "<td style='font-weight:bolder;'><a href='nbateams/".preg_replace('/\s+/', '', $team["teamName"]).".php' title='".$team["teamName"]."'>".$team["teamName"]."</a></td>";
 	  ++$count;
 	}else{
-	  $strTeam .= "<td style='font-weight:bolder;><a href='nbateams/".preg_replace('/\s+/', '', $team["teamName"]).".php' title='".$team["teamName"]."'>".$team["teamName"]."</a></td>";
+	  $strTeam .= "<td style='font-weight:bolder;'><a href='nbateams/".preg_replace('/\s+/', '', $team["teamName"]).".php' title='".$team["teamName"]."'>".$team["teamName"]."</a></td>";
 	  $count = 0;
 	  $division = "<tr><td colspan='5' align='center'class='thsub'><strong>".ucfirst($team['division'])."</strong></td></tr>";
 	  $colTeam = $division."<tr>".$strTeam."</tr>";
@@ -225,7 +234,7 @@ class localDB
       if ($results->num_rows > 0){
 	return "Failed - Player Exists";
       }else{
-	$query = "insert into $user(userId, playerId) values('1', '$player')";
+	$query = "insert into $user(playerId) values( '$player')";
 	$res = $this->db->query($query);
 	if (!$res){
 	  return "error";

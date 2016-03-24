@@ -17,7 +17,10 @@
   require_once('logindb.php.inc');
   $login = new localDB("connect.ini");
   $response = $login->myteam( $_SESSION['username'] );
+  }else{
+    header('Location: accessdenied.php');
   }
+  
  
   
 ?>

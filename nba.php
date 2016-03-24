@@ -2,7 +2,10 @@
   session_start();
    if ( isset( $_SESSION['username'] ) ){
   $x =  "<p class='welcome'>Welcome, <a class='removealine' href='account.php' title=''>".$_SESSION['username']."</a></p>";
+  }else{
+    header('Location: accessdenied.php');
   }
+  
   require_once("logindb.php.inc");
   $login = new localDB("connect.ini");
   $response = $login->nbaTeams();
@@ -54,21 +57,16 @@
   <div style="width:90%; border:1px solid black;height:150px;padding-
       right:50px;font-size:10px;margin:0px;padding-left:5px;">
       <?php 
-      $xml=("http://www.rotowire.com/rss/news.htm?sport=nba");
+      $xml=("http://www.rotoworld.com/rss/feed.aspx?sport=nba&ftype=news&count=12&format=rss");
 
       $xmlDoc = new DOMDocument();
       $xmlDoc->load($xml);
 
       //get elements from "<channel>"
       $channel=$xmlDoc->getElementsByTagName('channel')->item(0);
-$channel_title = $channel->getElementsByTagName('title')
-->item(0)->childNodes->item(0)->nodeValue;
-$channel_link = $channel->getElementsByTagName('link')
-->item(0)->childNodes->item(0)->nodeValue;
-$channel_desc = $channel->getElementsByTagName('description')
-->item(0)->childNodes->item(0)->nodeValue;
-
-      
+      $channel_title = $channel->getElementsByTagName('title')->item(0)->childNodes->item(0)->nodeValue;
+      $channel_link = $channel->getElementsByTagName('link')->item(0)->childNodes->item(0)->nodeValue;
+      $channel_desc = $channel->getElementsByTagName('description')->item(0)->childNodes->item(0)->nodeValue;
 
       //get and output "<item>" elements
       $x=$xmlDoc->getElementsByTagName('item');

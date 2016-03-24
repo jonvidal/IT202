@@ -2,7 +2,10 @@
   session_start();
    if ( isset( $_SESSION['username'] ) ){
   $x =  "<span class='welcome'>Welcome, ".$_SESSION['username']."</span>";
+  }else{
+    header('Location: accessdenied.php');
   }
+  
   require_once("../logindb.php.inc");
   $login = new localDB("connect.ini");
   $teamId = 4;
@@ -20,10 +23,7 @@
 <body>
 <div id="Holder">
 <div id="Header"><a href="index.php" title="Home"><img src="../logo.jpeg" alt="Fantasy Sports Guide" height="125"></a>
-<form id="form-layout">
-<input id="search" type="text" placeholder="Search..." >
-<input id="button" type="button" value="Search">
-</form>
+
 </div>
 
 <div id="NavBar">
@@ -52,7 +52,17 @@
 <div id="Content">
   <div>
   
-    <h2>Philadelphia 76ers<img src="img/PHI.png" alt="Philadelphia 76ers" height="99px" width="111px"/></h2>
+    <h2>Philadelphia 76ers<img src="img/PHI.png" alt="Philadelphia 76ers" height="99px" width="111px"/>
+    <select id="selectbox" name="" onchange="javascript:location.href = this.value;" style="width:150px;float: right;">
+      <option value="#">Select Team...</option>
+      <option value="http://localhost/nbateams/BostonCeltics.php">Boston Celtics</option>
+      <option value="http://localhost/nbateams/BrooklynNets.php">Brooklyn Nets</option>
+      <option value="http://localhost/nbateams/NewYorkKnicks.php">New York Knicks</option>
+      <option value="http://localhost/nbateams/Philadelphia76ers.php">Philadelphia 76ers</option>
+      <option value="http://localhost/nbateams/TorontoRaptors.php">Toronto Raptors</option>
+      
+    </select>
+    </h2>
  </div>
   <?php echo $response;?>
 

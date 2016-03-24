@@ -6,9 +6,6 @@
     header('Location: accessdenied.php');
   }
   
-  require_once("logindb.php.inc");
-  $login = new localDB("connect.ini");
-  $response = $login->allnbaplayers();
   
 ?>
 
@@ -17,7 +14,7 @@
 <head>
 <link href="css/layout.css" rel="stylesheet" type="text/css" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>NBA Standings</title>
+<title>NFL</title>
 </head>
 
 <body>
@@ -25,33 +22,21 @@
 <div id="Header"><a href="index.php" title="Home"><img src="logo.jpeg" alt="Fantasy Sports Guide" height="125"></a>
 <div style="float:right;"><?php echo $x?></div>
 </div>
-
 <div id="NavBar">
 <ul>
   <li><a href="index.php">Home</a></li>
-  <li><a href="nfl.php">NFL</a></li>
-  <li><a href="nba.php" class="active">NBA</a></li>
+  <li><a href="nfl.php" class="active">NFL</a></li>
+  <li><a href="nba.php">NBA</a></li>
   <ul style="float:right;list-style-type:none;">
     <li><a href="#">About</a></li>
     <li><a href="account.php">My Account</a></li>
-    <li><a href="logout.php">Log Out</a></li>
+    <li><a href="#">Log Out</a></li>
   </ul>
 </ul>
 </div>
-
-
-<div id="SubBar">
-<ul>
-  <li><a href="nba.php">Teams</a></li>
-  <li><a href="nbastanding.php">Standings</a></li>
-  <li><a href="players.php" class="active">Players</a></li>
-
-</ul>
-</div>
-
-
 <div id="Content">
-  <div style="overflow:scroll; overflow-x:hidden;border:1px solid black; width:100%; height:600px;"><?php echo $response;?></div>
+  
+
 </div>
 </div>
 </body>

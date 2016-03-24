@@ -2,6 +2,8 @@
   session_start();
   if ( isset( $_SESSION['username'] ) ){
   $x =  "<p class='welcome'>Welcome, <a class='removealine' href='account.php' title=''>".$_SESSION['username']."</a></p>";
+  }else{
+    header('Location: accessdenied.php');
   }
   
 ?>
@@ -28,7 +30,7 @@
   <ul style="float:right;list-style-type:none;">
     <li><a href="#">About</a></li>
     <li><a href="account.php">My Account</a></li>
-    <li><a href="#">Log Out</a></li>
+    <li><a href="logout.php">Log Out</a></li>
   </ul>
 </ul>
 </div>

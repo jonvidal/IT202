@@ -2,7 +2,10 @@
   session_start();
    if ( isset( $_SESSION['username'] ) ){
   $x =  "<p class='welcome'>Welcome, <a class='removealine' href='account.php' title=''>".$_SESSION['username']."</a></p>";
+  }else{
+    header('Location: accessdenied.php');
   }
+  
   require_once("logindb.php.inc");
   $login = new localDB("connect.ini");
   $response = $login->nbaStandings();

@@ -16,7 +16,9 @@
     $register = new localDB("connect.ini");
     $response = $register->addNewUser( $formUser, $formPass, $formName, $formLast, $formEmail );
       if ($response['success']===true){
-		header("Location: index.html");
+		header("Location: index.php");
+		session_start();
+		$_SESSION["username"] =  $formUser;
 	}
 	else{
 		$displayMessage = "Registration Failed:".$response['message']."<p>";
