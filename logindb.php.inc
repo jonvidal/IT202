@@ -273,29 +273,117 @@ class localDB
       if (!$results){
 	return "error";
       }
-      $heading = "<tr><td ><b>Players</b></td><td align='center'><b>FG%</b></td><td align='center'><b>FT%</b></td><td align='center'><b>3PM</b></td>
-		  <td align='center'><b>REB</b></td><td align='center'><b>AST</b></td><td align='center'><b>STL</b></td>
-		  <td align='center'><b>BLK</b></td><td align='center'><b>TO</b></td><td align='center'><b>PTS</b></td></tr>";
+      $heading = "<thead><th width='37%'><b>Players</b></th><th  width='7%' align='center'><b>FG%</b></th><th width='7%' align='center'><b>FT%</b></th><th width='7%' align='center'><b>3PM</b></th>
+		  <th width='7%' align='center'><b>REB</b></th><th width='7%' align='center'><b>AST</b></th><th  width='7%' align='center'><b>STL</b></th>
+		  <th width='7%' align='center'><b>BLK</b></th><th width='7%' align='center'><b>TO</b></th><th width='7%' align='center'><b>PTS</b></th></thead>";
       while( $team =  $results->fetch_assoc() ){
-	$row .= "<tr><td><form action='../account.php' method='post'>".$team['lastName'].", ".$team['firstName']." ".$team['position'].
+	$row .= "<tr><td width='37%'><form action='../account.php' method='post'>".$team['lastName'].", ".$team['firstName']." ".$team['position'].
 		"&nbsp; &nbsp; <button type='submit' name='addteam' alt='Add' value='".$team['playerID']."' style='border:none;background:url(nbateams/img/add_small.png);
 		width:16px;height:16px;vertical-align:middle;'></button>
-		</form></td><td align='center'>".
-		$team['fieldGoal']."</td><td align='center'>".
-		$team['freeThrow']."</td><td align='center'>".
-		$team['threePoint']."</td><td align='center'>".
-		$team['rebound']."</td><td align='center'>".
-		$team['assist']."</td><td align='center'>".
-		$team['steal']."</td><td align='center'>".
-		$team['block']."</td><td align='center'>".
-		$team['turnovers']."</td><td align='center'>".
+		</form></td><td width='7%' align='center'>".
+		$team['fieldGoal']."</td><td width='7%' align='center'>".
+		$team['freeThrow']."</td><td width='7%' align='center'>".
+		$team['threePoint']."</td><td width='7%' align='center'>".
+		$team['rebound']."</td><td width='7%' align='center'>".
+		$team['assist']."</td><td width='7%' align='center'>".
+		$team['steal']."</td><td width='7%' align='center'>".
+		$team['block']."</td><td width='7%' align='center'>".
+		$team['turnovers']."</td><td width='7%' align='center'>".
 		$team['points']."</td></tr>";
       }
-      return "<table class='rosters'>".$heading.$row."</table>";
+      
+      return "<table class='rosters'>".$heading."</table><table id='myTable' class='table' class='rosters'><tbody>".$row."</tbody></table>";
     }
-    
+     //-------------------------------------------------------------------------------------------------------------
+    //
+    //-------------------------------------------------------------------------------------------------------------
+    public function getPermission($username){
+      $query = "select * from fantasysport where userName = '$username'";
+      $result = $this->db->query($query);
+      if (!$result){
+	return array("success" => TRUE, "message" => "Failed to connect in user table");
+      }else {
+	if ($result->num_rows > 0){
+	  $check = $result->fetch_assoc();
+	  $permission = $check["permission"];
+	  if ($permission == 1){
+	    return array("success" => TRUE);
+	  }else return array("success" => FALSE);
+	}else return array("success" => FALSE, "message" => "Cannot Find The $username");
+      }
+    }
+     //-------------------------------------------------------------------------------------------------------------
+    //
+    //-------------------------------------------------------------------------------------------------------------
+    public function listNba(){
+    $query = "select * from nbateam";
+    $results = $this->db->query($query);
+    if (!$results){
+	return array("success" => FALSE, "message" => "Failed to connect in nba table");
+      }else{
+	while($row = $results->fetch_assoc()){
+	  $list .= "<option value='".$row['teamId']."'>".$row['teamName']."</option>";
+	}
+	$return = "<select name='nbateam'><option>Select A Team...</option>".$list."</select>";
+	return array("success"=>TRUE, "message"=> $return);
+      }
   
-    
+
    }
+    //-------------------------------------------------------------------------------------------------------------
+    //
+    //-------------------------------------------------------------------------------------------------------------
+   public function adminAdd($teamId,$firstName,$lastName,$position,$fieldGoal,$freeThrow,$threePoint,$rebound,$assist,
+				  $steal,$block,$turnovers,$points){
+   $query="select * from nbarosters where firstName = '$firstName' and lastName = '$lastName' and position = '$position'
+	  and teamId = '$teamId';";
+   $result = $this->db->query($query);
+   if(!$result){
+    return array("success"=>FALSE, "message"=>"Error: Failed to connect to roster table");
+   }else{
+    if($result->num_rows == 0){
+      $add = "insert into nbarosters(teamId, firstName, lastName, position, fieldGoal, freeThrow, threePoint,
+		      rebound, assist, steal, block, turnovers,points)
+		      values('$teamId','$firstName','$lastName','$position','$fieldGoal',
+			      '$freeThrow','$threePoint','$rebound','$assist','$steal','$block','$turnovers','$points');";
+		      
+	$results_add = $this->db->query($add);
+	if (!$results_add){
+	  return array("success" => FALSE, "message" => "Error insert to roster table");
+	}else {
+	  return array("success" => TRUE);
+	}
+      }else return array("success"=> FALSE, "message"=>"Error: $firstName $lastName already exist in selected team. Try Again!");
+    }
+   }
+   
+   public function adminRemove($teamId, $firstName, $lastName, $position){
+    $queryteam="select * from nbarosters where firstName = '$firstName' and lastName = '$lastName' and position = '$position'
+	  and teamId = '$teamId';";
+    $resultsteam = $this->db->query($queryteam);
+    if(!$resultsteam){
+      return array("success"=>FALSE, "message"=>"Error: Failed to connect to roster table");
+    }else{
+	if($resultsteam->num_rows > 0){
+	$query = "delete from nbarosters where firstName = '$firstName' and lastName = '$lastName' and position = '$position'
+	    and teamId = '$teamId';";
+	$results = $this->db->query($query);
+	if(!$results){
+	  return array("success" => FALSE, "message" => "Error: deleteing $firstName $lastName is not found. Try Again!");
+	}else return array("success" => TRUE);
+      }else return array("success" => FALSE, "message" => "Error: $firstName $lastName is not found. Try Again!");
+      
+     }
+   
+   }
+   
+   
+   
+   
+   
+   
+  }
+  
+ 
 // at this point db is connected
 ?>
